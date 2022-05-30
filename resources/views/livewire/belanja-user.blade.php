@@ -10,11 +10,11 @@
                         <th>Status</th>
                         <th>Harga</th>
                         <th>Aksi</th>
-                        <th>Hapus</th>
                     </thead>
                     <tbody>
-                        <?php $no = 1 ?>
+                        <?php $no = 1; $total_harga = 0; ?>
                         @forelse ($belanja as $pesanan)
+                        <?php $total_harga =  $pesanan->harga_produk + $total_harga; $user_id = $pesanan->user_id ?>
                         <tr>
                             <td>{{$no++}}</td>
                             <td>{{$pesanan->created_at}}</td>
@@ -30,22 +30,25 @@
                             </td>
                             <td><strong>Rp. {{number_format($pesanan->harga_produk)}}</strong></td>
                             <td>
-                                @if ($pesanan->status == 0)
-                                <a href="{{url('tambahongkir/'.$pesanan->belanja_id)}}" class="btn btn-success">Tambah
-                                    Ongkir</a>
-                                @endif
-                            </td>
-                            <td>
                                 <button class="btn btn-danger"
                                     wire:click="hapus_belanja({{$pesanan->belanja_id}})">Hapus
                                     Pesanan</button>
                             </td>
                         </tr>
+
                         @empty
                         <tr>
                             <td>DATA KOSONG</td>
                         </tr>
                         @endforelse
+                        <tr>
+                            <td colspan="4"><b>Total Harga:</b> </td>
+                            <td><b>Rp. <?=number_format($total_harga)?></b>
+                                <br> (belum ongkir)
+                            </td>
+                            <td><a href="{{url('tambahongkir/'.$user_id)}}"><button class="btn btn-success">Bayar
+                                        Sekarang</button></a></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
